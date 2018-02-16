@@ -56,6 +56,9 @@ public class CanonicalVectorSpace<S,C> implements VectorSpace<Vector<C>, S> {
 	@Override
 	public Vector<C> subtract(Vector<C> left, Vector<C> right) {
 		checkDimension(left, right);
+		if(right==zero) return left;
+		if(left==zero) return negate(right);
+		if(left==right) return zero;
 		C[] cmp = newComponents();
 		for(int i=0; i<dimension; ++i) {
 			cmp[i] = factorSpace.subtract(left.components[i], right.components[i]);
@@ -71,6 +74,8 @@ public class CanonicalVectorSpace<S,C> implements VectorSpace<Vector<C>, S> {
 	@Override
 	public Vector<C> add(Vector<C> a, Vector<C> b) {
 		checkDimension(a, b);
+		if(a==zero) return b;
+		if(b==zero) return a;
 		C[] cmp = newComponents();
 		for(int i=0; i<dimension; ++i) {
 			cmp[i] = factorSpace.add(a.components[i], b.components[i]);
@@ -86,6 +91,9 @@ public class CanonicalVectorSpace<S,C> implements VectorSpace<Vector<C>, S> {
 	@Override
 	public Vector<C> scale(Vector<C> vector, S scalar) {
 		checkDimension(vector);
+		Field<S> scalarField = factorSpace.getScalarField();
+		if(scalar==scalarField.getZeroElement()) return zero;
+		if(scalar==scalarField.getUnitElement()) return vector;
 		C[] cmp = newComponents();
 		for(int i=0; i<dimension; ++i) {
 			cmp[i] = factorSpace.scale(vector.components[i], scalar);

@@ -6,6 +6,8 @@ public interface MultiplicationMagma<E> {
 	
 	E multiply(E a, E b);
 	
-	Optional<E> sqrt(E element);
+	E pow(E base, int exponent);
+	
+	Optional<E> root(E radicand, int degree);
 
 }

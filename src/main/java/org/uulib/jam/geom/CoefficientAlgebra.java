@@ -10,7 +10,7 @@ import java8.util.Optional;
 
 public class CoefficientAlgebra<E> implements UnitalGradedAlgebra<Scalar<E>, E> {
 	
-	private final Field<E> scalarField;z
+	private final Field<E> scalarField;
 	private final Scalar<E> unit;
 	
 	CoefficientAlgebra(Field<E> scalarField) {

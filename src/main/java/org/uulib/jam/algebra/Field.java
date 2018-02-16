@@ -1,7 +1,5 @@
 package org.uulib.jam.algebra;
 
-import org.uulib.jam.algebra.ops.MultiplicationGroup;
-
 import java8.util.Optional;
 
 /**
@@ -10,4 +8,10 @@ import java8.util.Optional;
  *
  * @param <E>
  */
-public interface Field<E> extends Ring<E>, MultiplicationGroup<E> {}
+public interface Field<E> extends Ring<E> {
+	
+	Optional<E> reciprocal(E element);
+	
+	Optional<E> divide(E dividend, E divisor);
+	
+}

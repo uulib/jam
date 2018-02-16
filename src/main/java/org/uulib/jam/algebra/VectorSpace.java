@@ -6,8 +6,8 @@ public interface VectorSpace<V,S> extends AdditionGroup<V> {
 	
 	Field<S> getScalarField();
 	
-	V scale(V vector, S scalar);
+	V scalarMultiply(V vector, S scalar);
 	
-	int getDimension();
+	V scalarDivide(V vector, S scalar);
 
 }

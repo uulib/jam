@@ -4,6 +4,6 @@ public interface AdditionGroup<E> extends AdditionMonoid<E> {
 	
 	E negate(E element);
 	
-	E subtract(E left, E right);
+	E subtract(E minuend, E subtrahend);
 
 }
