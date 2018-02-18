@@ -41,11 +41,6 @@ public class Equivalences {
 		}
 
 		@Override
-		public E scale(E vector, E scalar) {
-			return field.multiply(vector, scalar);
-		}
-
-		@Override
 		public E negate(E element) {
 			return field.negate(element);
 		}
@@ -76,13 +71,38 @@ public class Equivalences {
 		}
 
 		@Override
-		public Optional<E> sqrt(E element) {
-			return field.sqrt(element);
+		public E scalarMultiply(E vector, E scalar) {
+			return field.multiply(vector, scalar);
 		}
 
 		@Override
-		public int getDimension() {
-			return 1;
+		public Optional<E> scalarDivide(E vector, E scalar) {
+			return field.divide(vector, scalar);
+		}
+
+		@Override
+		public E multiply(E element, int multiplier) {
+			return field.multiply(element, multiplier);
+		}
+
+		@Override
+		public Optional<E> divide(E dividend, int divisor) {
+			return field.divide(dividend, divisor);
+		}
+
+		@Override
+		public E pow(E base, int exponent) {
+			return field.pow(base, exponent);
+		}
+
+		@Override
+		public Optional<E> root(E radicand, int degree) {
+			return field.root(radicand, degree);
+		}
+
+		@Override
+		public boolean equal(E a, E b) {
+			return field.equal(a, b);
 		}
 		
 	}

@@ -8,9 +8,7 @@ public interface InnerProductSpace<V,S,C> extends VectorSpace<V,S> {
 	 * This must be 1-dimensional.
 	 * @return
 	 */
-	UnitalGradedAlgebra<C,S> getCoefficientAlgebra();
-	
-	int getCoefficientGrade();
+	UnitalAlgebra<C,S> getCoefficientAlgebra();
 	
 	C innerProduct(V a, V b);
 
