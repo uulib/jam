@@ -3,13 +3,14 @@ package org.uulib.jam.algebra.polynomial;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.uulib.jam.algebra.DefaultAlgebraMethods;
 import org.uulib.jam.algebra.Field;
-import org.uulib.jam.algebra.Ring;
+import org.uulib.jam.algebra.UnitalAlgebra;
 import org.uulib.jam.algebra.polynomial.Polynomial.Builder;
 
 import java8.util.Optional;
 
-public class PolynomialField<E> implements Ring<Polynomial<E>> {
+public class PolynomialField<E> implements UnitalAlgebra<Polynomial<E>,E> {
 	
 	private final Field<E> baseField;
 	private final Polynomial<E> zero;
@@ -18,8 +19,8 @@ public class PolynomialField<E> implements Ring<Polynomial<E>> {
 	@SuppressWarnings("unchecked")
 	PolynomialField(Field<E> baseField) {
 		this.baseField = baseField;
-		this.zero = new Polynomial<>(baseField, 0, (E[]) new Object[]{baseField.getZeroElement()});
-		this.unit = new Polynomial<>(baseField, 0, (E[]) new Object[]{baseField.getUnitElement()});
+		this.zero = new Polynomial<>(0, (E[]) new Object[]{baseField.getZeroElement()});
+		this.unit = new Polynomial<>(0, (E[]) new Object[]{baseField.getUnitElement()});
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class PolynomialField<E> implements Ring<Polynomial<E>> {
 			for(int i=0; i<element.coefficients.length; ++i) {
 				newCoefficients[i] = baseField.multiply(element.coefficients[i], multiplier);
 			}
-			return new Polynomial<>(baseField, element.baseDegree, newCoefficients);
+			return new Polynomial<>(element.baseDegree, newCoefficients);
 		}
 	}
 
@@ -67,7 +68,7 @@ public class PolynomialField<E> implements Ring<Polynomial<E>> {
 				}
 				newCoefficients[i] = quotient.get();
 			}
-			return Optional.of(new Polynomial<>(baseField, dividend.baseDegree, newCoefficients));
+			return Optional.of(new Polynomial<>(dividend.baseDegree, newCoefficients));
 		}
 	}
 
@@ -95,16 +96,7 @@ public class PolynomialField<E> implements Ring<Polynomial<E>> {
 		if(exponent<0) {
 			throw new IllegalArgumentException("Exponent must be non-negative.");
 		}
-		switch(exponent) {
-		case 0: return unit;
-		case 1: return base;
-		default:
-			Polynomial<E> rc = base;
-			for(int i=1; i<exponent; ++i) {
-				rc = multiply(rc, base);
-			}
-			return rc;
-		}
+		return DefaultAlgebraMethods.pow(this, base, exponent);
 	}
 
 	@Override
@@ -140,6 +132,38 @@ public class PolynomialField<E> implements Ring<Polynomial<E>> {
 		return builder.build();
 	}
 	
+	@SafeVarargs
+	private final Polynomial<E> addAll(Polynomial<E>... addenda) {
+		if(addenda.length==1) {
+			return addenda[0];
+		} else {
+			Builder<E> builder = new Builder<>(baseField, addenda[0].baseDegree,
+					new ArrayList<E>(Arrays.asList(addenda[0].coefficients)));
+			for(int i=1; i<addenda.length; ++i) {
+				for(int j=0; j<addenda[i].coefficients.length; ++j) {
+					builder.addTerm(addenda[i].coefficients[j], addenda[i].baseDegree+j);
+				}
+			}
+			return builder.build();
+		}
+	}
+
+	@Override
+	public Field<E> getScalarField() {
+		return baseField;
+	}
+
+	@Override
+	public Polynomial<E> scalarMultiply(Polynomial<E> vector, E scalar) {
+		return multiply(vector, scalar, 0);
+	}
+
+	@Override
+	public Optional<Polynomial<E>> scalarDivide(Polynomial<E> vector, E scalar) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	private Polynomial<E> multiply(Polynomial<E> p, E coefficient, int exponent) {
 		if(baseField.equal(baseField.getZeroElement(), coefficient)) {
 			return zero;
@@ -155,23 +179,7 @@ public class PolynomialField<E> implements Ring<Polynomial<E>> {
 				coefficients[i] = baseField.multiply(coefficient, coefficients[i]);
 			}
 		}
-		return new Polynomial<>(baseField, p.baseDegree+exponent, coefficients);
-	}
-	
-	@SafeVarargs
-	private final Polynomial<E> addAll(Polynomial<E>... addenda) {
-		if(addenda.length==1) {
-			return addenda[0];
-		} else {
-			Builder<E> builder = new Builder<>(baseField, addenda[0].baseDegree,
-					new ArrayList<E>(Arrays.asList(addenda[0].coefficients)));
-			for(int i=1; i<addenda.length; ++i) {
-				for(int j=0; j<addenda[i].coefficients.length; ++j) {
-					builder.addTerm(addenda[i].coefficients[j], addenda[i].baseDegree+j);
-				}
-			}
-			return builder.build();
-		}
+		return new Polynomial<>(p.baseDegree+exponent, coefficients);
 	}
 
 }

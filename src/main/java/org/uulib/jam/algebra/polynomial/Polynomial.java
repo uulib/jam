@@ -1,21 +1,14 @@
 package org.uulib.jam.algebra.polynomial;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.uulib.jam.algebra.Field;
-import org.uulib.jam.algebra.element.FieldElement;
 
-import java8.util.Optional;
-
-public class Polynomial<E> implements FieldElement<Polynomial<E>> {
-	
-	private final Field<E> baseField;
+public class Polynomial<E> {
 	final int baseDegree;
 	final E[] coefficients;
 	
-	Polynomial(Field<E> baseField, int baseDegree, E[] coefficients) {
-		this.baseField = baseField;
+	Polynomial(int baseDegree, E[] coefficients) {
 		this.baseDegree = baseDegree;
 		this.coefficients = coefficients;
 	}
@@ -71,7 +64,7 @@ public class Polynomial<E> implements FieldElement<Polynomial<E>> {
 		}
 		
 		Polynomial<E> build() {
-			return new Polynomial<>(baseField, baseDegree, getCoefficientArray());
+			return new Polynomial<>(baseDegree, getCoefficientArray());
 		}
 		
 	}
