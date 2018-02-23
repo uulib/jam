@@ -2,13 +2,12 @@ package org.uulib.jam.algebra.polynomial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.uulib.jam.algebra.DefaultAlgebraMethods;
 import org.uulib.jam.algebra.Field;
 import org.uulib.jam.algebra.UnitalAlgebra;
 import org.uulib.jam.algebra.polynomial.Polynomial.Builder;
-
-import java8.util.Optional;
 
 public class PolynomialField<E> implements UnitalAlgebra<Polynomial<E>,E> {
 	
@@ -92,14 +91,6 @@ public class PolynomialField<E> implements UnitalAlgebra<Polynomial<E>,E> {
 	}
 
 	@Override
-	public Polynomial<E> pow(Polynomial<E> base, int exponent) {
-		if(exponent<0) {
-			throw new IllegalArgumentException("Exponent must be non-negative.");
-		}
-		return DefaultAlgebraMethods.pow(this, base, exponent);
-	}
-
-	@Override
 	public Optional<Polynomial<E>> root(Polynomial<E> radicand, int degree) {
 		// TODO Auto-generated method stub
 		return null;
@@ -149,7 +140,7 @@ public class PolynomialField<E> implements UnitalAlgebra<Polynomial<E>,E> {
 	}
 
 	@Override
-	public Field<E> getScalarField() {
+	public Field<E> getBaseField() {
 		return baseField;
 	}
 

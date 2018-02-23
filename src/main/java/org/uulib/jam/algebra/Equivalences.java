@@ -1,5 +1,8 @@
 package org.uulib.jam.algebra;
 
+import org.uulib.jam.algebra.graded.GradedAlgebra;
+import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
+
 import java8.util.Optional;
 
 public class Equivalences {
@@ -36,7 +39,7 @@ public class Equivalences {
 		}
 
 		@Override
-		public Field<E> getScalarField() {
+		public Field<E> getBaseField() {
 			return field;
 		}
 
@@ -129,8 +132,8 @@ public class Equivalences {
 		}
 
 		@Override
-		public Field<S> getScalarField() {
-			return algebra.getScalarField();
+		public Field<S> getBaseField() {
+			return algebra.getBaseField();
 		}
 
 		@Override
@@ -194,8 +197,8 @@ public class Equivalences {
 		}
 
 		@Override
-		public Field<S> getScalarField() {
-			return delegate.getScalarField();
+		public Field<S> getBaseField() {
+			return delegate.getBaseField();
 		}
 
 		@Override

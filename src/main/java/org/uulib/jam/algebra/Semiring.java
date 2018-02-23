@@ -8,4 +8,4 @@ import org.uulib.jam.algebra.ops.MultiplicationMonoid;
  *
  * @param <E> The element type this semiring operates on
  */
-public interface Semiring<E> extends AdditionMonoid<E>, MultiplicationMonoid<E>, EquivalenceRellation<E> {}
+public interface Semiring<E> extends AdditionMonoid<E>, MultiplicationMonoid<E> {}

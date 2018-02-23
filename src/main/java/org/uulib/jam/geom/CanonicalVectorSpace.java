@@ -84,14 +84,14 @@ public class CanonicalVectorSpace<S,C> implements VectorSpace<Vector<C>, S> {
 	}
 
 	@Override
-	public Field<S> getScalarField() {
-		return factorSpace.getScalarField();
+	public Field<S> getBaseField() {
+		return factorSpace.getBaseField();
 	}
 
 	@Override
 	public Vector<C> scale(Vector<C> vector, S scalar) {
 		checkDimension(vector);
-		Field<S> scalarField = factorSpace.getScalarField();
+		Field<S> scalarField = factorSpace.getBaseField();
 		if(scalar==scalarField.getZeroElement()) return zero;
 		if(scalar==scalarField.getUnitElement()) return vector;
 		C[] cmp = newComponents();

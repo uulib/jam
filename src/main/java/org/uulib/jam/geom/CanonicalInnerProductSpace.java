@@ -1,7 +1,7 @@
 package org.uulib.jam.geom;
 
 import org.uulib.jam.algebra.InnerProductSpace;
-import org.uulib.jam.algebra.UnitalGradedAlgebra;
+import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
 
 public final class CanonicalInnerProductSpace<S,C> extends CanonicalVectorSpace<S,C> implements InnerProductSpace<Vector<C>,S,C> {
 	

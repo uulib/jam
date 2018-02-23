@@ -3,8 +3,8 @@ package org.uulib.jam.geom;
 import org.uulib.jam.algebra.Equivalences;
 import org.uulib.jam.algebra.Field;
 import org.uulib.jam.algebra.Homeomorphism;
-import org.uulib.jam.algebra.UnitalGradedAlgebra;
 import org.uulib.jam.algebra.VectorSpace;
+import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
 
 import java8.util.Optional;
 
@@ -29,7 +29,7 @@ public class CoefficientAlgebra<E> implements UnitalGradedAlgebra<Scalar<E>, E> 
 	}
 
 	@Override
-	public Field<E> getScalarField() {
+	public Field<E> getBaseField() {
 		return scalarField;
 	}
 
