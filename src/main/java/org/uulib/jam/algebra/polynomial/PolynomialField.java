@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.uulib.jam.algebra.DefaultAlgebraMethods;
 import org.uulib.jam.algebra.Field;
 import org.uulib.jam.algebra.UnitalAlgebra;
+import org.uulib.jam.algebra.impl.DefaultAlgebraMethods;
 import org.uulib.jam.algebra.polynomial.Polynomial.Builder;
 
 public class PolynomialField<E> implements UnitalAlgebra<Polynomial<E>,E> {

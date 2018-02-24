@@ -2,9 +2,7 @@ package org.uulib.jam.algebra;
 
 import java.util.Optional;
 
-import org.uulib.jam.algebra.ops.MultiplicationMonoid;
-
-public interface MultiplicativeGroup<E> extends MultiplicationMonoid<E> {
+public interface MultiplicativeGroup<E> extends MultiplicativeMonoid<E>, WithZeroElement<E> {
 	
 	Optional<E> reciprocal(E element);
 	
@@ -15,8 +13,8 @@ public interface MultiplicativeGroup<E> extends MultiplicationMonoid<E> {
 	@Override
 	default Optional<E> pow(E base, int exponent) {
 		return exponent<0
-				? reciprocal(base).flatMap(b -> MultiplicationMonoid.super.pow(b, -exponent))
-				: MultiplicationMonoid.super.pow(base, exponent);
+				? reciprocal(base).flatMap(b -> MultiplicativeMonoid.super.pow(b, -exponent))
+				: MultiplicativeMonoid.super.pow(base, exponent);
 	}
 
 }

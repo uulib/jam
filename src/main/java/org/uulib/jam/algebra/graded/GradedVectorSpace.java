@@ -1,16 +1,15 @@
 package org.uulib.jam.algebra.graded;
 
+import org.uulib.jam.algebra.PseudoModule;
 import org.uulib.jam.algebra.VectorSpace;
 
-public interface GradedVectorSpace<V,S> extends VectorSpace<V,S> {
+public interface GradedVectorSpace<V,S> extends PseudoModule<V,S> {
 	
 	VectorSpace<V,S> getFactorSpace(int grade);
 	
 	int getGrade(V element);
 	
-	default boolean commensurate(V a, V b) {
-		return isZero(a) || isZero(b) || getGrade(a)==getGrade(b);
-	}
+	boolean commensurate(V a, V b);
 
 	/**
 	 * TODO explain grade limitation
@@ -18,7 +17,6 @@ public interface GradedVectorSpace<V,S> extends VectorSpace<V,S> {
 	 * @param subtrahend
 	 * @return
 	 */
-	@Override
 	V subtract(V minuend, V subtrahend) throws IllegalArgumentException;
 
 	/**
@@ -30,18 +28,12 @@ public interface GradedVectorSpace<V,S> extends VectorSpace<V,S> {
 		return getFactorSpace(0).getZeroElement();
 	}
 
-	@Override
-	default boolean isZero(V element) {
-		return getFactorSpace(getGrade(element)).isZero(element);
-	}
-
 	/**
 	 * TODO explain grade limitation
 	 * @param a
 	 * @param b
 	 * @return
 	 */
-	@Override
 	V add(V a, V b) throws IllegalArgumentException;
 
 }

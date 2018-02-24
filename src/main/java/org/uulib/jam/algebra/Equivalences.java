@@ -1,7 +1,7 @@
 package org.uulib.jam.algebra;
 
 import org.uulib.jam.algebra.graded.GradedAlgebra;
-import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
+import org.uulib.jam.algebra.graded.GradedUnitalAlgebra;
 
 import java8.util.Optional;
 
@@ -14,11 +14,11 @@ public class Equivalences {
 		return new FieldAlgebra<>(field);
 	}
 	
-	public static <E> UnitalGradedAlgebra<E, E> asGradedAlgebra(Field<E> field) {
+	public static <E> GradedUnitalAlgebra<E, E> asGradedAlgebra(Field<E> field) {
 		return trivialGrading(asAlgebra(field));
 	}
 	
-	public static <V,S> UnitalGradedAlgebra<V,S> trivialGrading(UnitalAlgebra<V,S> algebra) {
+	public static <V,S> GradedUnitalAlgebra<V,S> trivialGrading(UnitalAlgebra<V,S> algebra) {
 		return new TiviallyGradedUnitalAlgebra<>(algebra);
 	}
 	
@@ -148,7 +148,7 @@ public class Equivalences {
 		
 	}
 	
-	private static final class TiviallyGradedUnitalAlgebra<V,S> extends TriviallyGradedAlgebra<V,S> implements UnitalGradedAlgebra<V,S> {
+	private static final class TiviallyGradedUnitalAlgebra<V,S> extends TriviallyGradedAlgebra<V,S> implements GradedUnitalAlgebra<V,S> {
 
 		private final UnitalAlgebra<V,S> algebra;
 		

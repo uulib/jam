@@ -4,11 +4,11 @@ import org.uulib.jam.algebra.Equivalences;
 import org.uulib.jam.algebra.Field;
 import org.uulib.jam.algebra.Homeomorphism;
 import org.uulib.jam.algebra.VectorSpace;
-import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
+import org.uulib.jam.algebra.graded.GradedUnitalAlgebra;
 
 import java8.util.Optional;
 
-public class CoefficientAlgebra<E> implements UnitalGradedAlgebra<Scalar<E>, E> {
+public class CoefficientAlgebra<E> implements GradedUnitalAlgebra<Scalar<E>, E> {
 	
 	private final Field<E> scalarField;
 	private final Scalar<E> unit;

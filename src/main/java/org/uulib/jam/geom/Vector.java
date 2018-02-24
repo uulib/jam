@@ -2,7 +2,7 @@ package org.uulib.jam.geom;
 
 import org.uulib.jam.algebra.InnerProductSpace;
 import org.uulib.jam.algebra.UnitalAlgebra;
-import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
+import org.uulib.jam.algebra.graded.GradedUnitalAlgebra;
 
 public class Vector<S> {
 	

@@ -1,119 +1,129 @@
 package org.uulib.jam.algebra.polynomial;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
+import org.uulib.jam.ObjIntFunction;
 import org.uulib.jam.algebra.Field;
-import org.uulib.jam.algebra.VectorSpace;
-import org.uulib.jam.algebra.graded.DelegatingFactorSpace;
 import org.uulib.jam.algebra.graded.GradedDivisionAlgebra;
+import org.uulib.jam.algebra.graded.impl.AbstractUnitalGradedAlgebra;
+import org.uulib.jam.algebra.graded.impl.GradedVectorSpaceDefaults;
+import org.uulib.jam.algebra.impl.AnnihilatingMultiplyDefaults;
+import org.uulib.jam.algebra.impl.DefaultAddititionSubtraction;
+import org.uulib.jam.algebra.impl.DefaultIntDivision;
+import org.uulib.jam.algebra.impl.MultiplicativeGroupDefaults;
+import org.uulib.jam.algebra.impl.MultiplicativeMonoidDefaults;
 
-public class MonomialAlgebra<E> implements GradedDivisionAlgebra<Monomial<E>,E> {
+public class MonomialAlgebra<E> extends AbstractUnitalGradedAlgebra<Monomial<E>,E>
+implements GradedDivisionAlgebra<Monomial<E>,E>, GradedVectorSpaceDefaults<Monomial<E>,E>, MultiplicativeGroupDefaults<Monomial<E>> {
 	
-	private final Field<E> baseField;
 	private final E[] zeroCoefficient;
-	private final Monomial<E> unit;
-	private final List<VectorSpace<Monomial<E>,E>> cachedFactors;
+	
+	private final BiFunction<E,E,E> baseAdd, baseSubtract, baseMultiply, baseDivide;
+	private final Function<E,E> baseNegate, baseReciprocal;
+	private final ObjIntFunction<E,Optional<E>> baseIntDivide, baseRoot;
+	
 	
 	@SuppressWarnings("unchecked")
 	MonomialAlgebra(Field<E> baseField) {
-		this.baseField = baseField;
-		this.unit = new Monomial<>(0, baseField.getUnitElement());
+		super(baseField, new Monomial<>(0, baseField.getUnitElement()));
 		this.zeroCoefficient = (E[]) new Object[] {baseField.getZeroElement()};
-		this.cachedFactors = Arrays.asList(
-				createFactorSpace(0), createFactorSpace(1), createFactorSpace(2));
-	}
-	
-	@Override
-	public Field<E> getBaseField() {
-		return baseField;
+		this.baseAdd = DefaultAddititionSubtraction.getNonZeroAdd(baseField);
+		this.baseSubtract = DefaultAddititionSubtraction.getNonZeroNonEqualSubtract(baseField);
+		this.baseMultiply = AnnihilatingMultiplyDefaults.getNonZeroNonUnitMultiply(baseField);
+		this.baseDivide = MultiplicativeGroupDefaults.getNonZeroDivide(baseField);
+		this.baseNegate = DefaultAddititionSubtraction.getNonZeroNegate(baseField);
+		this.baseReciprocal = MultiplicativeGroupDefaults.getNonZeroNonUnitReciprocal(baseField);
+		this.baseIntDivide = DefaultIntDivision.getNonZeroDivide(baseField);
+		this.baseRoot = MultiplicativeMonoidDefaults.getNonUnitRoot(baseField);
 	}
 
 	@Override
-	public VectorSpace<Monomial<E>, E> getFactorSpace(int grade) {
-		return grade<cachedFactors.size() ? cachedFactors.get(grade) : createFactorSpace(grade);
+	public Optional<Monomial<E>> divideNonZero(Monomial<E> dividend, int nonZeroNonOneDivisor) {
+		return baseIntDivide.apply(dividend.getCoeficient(), nonZeroNonOneDivisor)
+				.map(c -> new Monomial<>(dividend.getExponent(), c));
 	}
-	
-	private VectorSpace<Monomial<E>,E> createFactorSpace(int grade) {
-		return new DelegatingFactorSpace<>(this, grade, new Monomial<>(grade, zeroCoefficient));
+
+	@Override
+	public Monomial<E> multiply(int multiplier, Monomial<E> element) { //TODO Zero checks
+		return new Monomial<>(element.getExponent(), getBaseField().multiply(multiplier, element.getCoeficient()));
+	}
+
+	@Override
+	public Optional<Monomial<E>> rootNonUnit(Monomial<E> radicand, int nonZeroNonOneDegree) {
+		int exp = radicand.getExponent();
+		if(exp%nonZeroNonOneDegree!=0) {
+			return Optional.empty();
+		}
+		return baseRoot.apply(radicand.getCoeficient(), nonZeroNonOneDegree)
+				.map(c -> new Monomial<>(exp/nonZeroNonOneDegree, c));
 	}
 
 	@Override
 	public int getGrade(Monomial<E> element) {
 		return element.getExponent();
 	}
-	
+
 	@Override
-	public Monomial<E> add(Monomial<E> a, Monomial<E> b) throws IllegalArgumentException {
-		if(isZero(a)) {
-			return b;
-		}
-		if(isZero(b)) {
-			return a;
-		}
-		if(getGrade(a)!=getGrade(b)) {
-			
-		}
+	public Monomial<E> scalarMultiplyNonZeroNonUnit(Monomial<E> nonZeroA, E nonZeroNonUnitB) {
+		return new Monomial<>(nonZeroA.getExponent(), baseMultiply.apply(nonZeroA.getCoeficient(), nonZeroNonUnitB));
 	}
 
 	@Override
-	public Monomial<E> subtract(Monomial<E> minuend, Monomial<E> subtrahend) throws IllegalArgumentException {
-		if
+	public Monomial<E> scalarDivideNonZeroNonUnit(Monomial<E> nonZeroDividend, E nonZeroNonUnitDivisor) {
+		return new Monomial<>(nonZeroDividend.getExponent(), baseDivide.apply(nonZeroDividend.getCoeficient(), nonZeroNonUnitDivisor));
 	}
 
 	@Override
-	public Monomial<E> scalarMultiply(Monomial<E> vector, E scalar) {
-		// TODO Auto-generated method stub
-		return null;
+	public Monomial<E> negateNonZero(Monomial<E> element) {
+		return new Monomial<>(element.getExponent(), baseNegate.apply(element.getCoeficient()));
 	}
 
 	@Override
-	public Optional<E> divideToScalar(Monomial<E> dividend, Monomial<E> divisor) {
-		// TODO Auto-generated method stub
-		return null;
+	public Monomial<E> reciprocalNonZeroNonUnit(Monomial<E> nonZeroNonUnitElement) {
+		return new Monomial<>(-nonZeroNonUnitElement.getExponent(), baseReciprocal.apply(nonZeroNonUnitElement.getCoeficient()));
 	}
 
 	@Override
-	public Monomial<E> negate(Monomial<E> element) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean areCommensurateVectorsEqual(Monomial<E> a, Monomial<E> b) {
+		return getBaseField().equal(a.getCoeficient(), b.getCoeficient());
 	}
 
 	@Override
-	public Optional<Monomial<E>> divide(Monomial<E> dividend, int divisor) {
-		// TODO Auto-generated method stub
-		return null;
+	public Monomial<E> addNonZeroCommensurate(Monomial<E> a, Monomial<E> b) {
+		return new Monomial<>(a.getExponent(), baseAdd.apply(a.getCoeficient(), b.getCoeficient()));
 	}
 
 	@Override
-	public boolean equal(Monomial<E> a, Monomial<E> b) {
-		// TODO Auto-generated method stub
-		return false;
+	public Monomial<E> subtractNonZeroNonEqualCommensurate(Monomial<E> minuend, Monomial<E> subtrahend) {
+		return new Monomial<>(minuend.getExponent(), baseSubtract.apply(minuend.getCoeficient(), subtrahend.getCoeficient()));
 	}
 
 	@Override
-	public Monomial<E> multiply(Monomial<E> a, Monomial<E> b) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<E> divideNonZeroNonEqualCommensurateToScalar(Monomial<E> dividend, Monomial<E> divisor) {
+		return Optional.of(baseDivide.apply(dividend.getCoeficient(), divisor.getCoeficient()));
 	}
 
 	@Override
-	public Optional<Monomial<E>> root(Monomial<E> radicand, int degree) {
-		// TODO Auto-generated method stub
-		return null;
+	protected Monomial<E> getGradedZero(int grade) {
+		return new Monomial<>(grade, zeroCoefficient);
 	}
 
 	@Override
-	public Monomial<E> getUnitElement() {
-		// TODO Auto-generated method stub
-		return null;
+	public Monomial<E> multiplyNonZeroNonUnit(Monomial<E> a, Monomial<E> b) {
+		return new Monomial<>(a.getExponent()+b.getExponent(), baseMultiply.apply(a.getCoeficient(), b.getCoeficient()));
 	}
 
 	@Override
-	public Optional<Monomial<E>> reciprocal(Monomial<E> element) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isZero(Monomial<E> element) {
+		return getBaseField().isZero(element.getCoeficient());
+	}
+
+	@Override
+	public Monomial<E> divideNonZero(Monomial<E> nonZeroDividend, Monomial<E> nonZeroNonUnitDivisor) {
+		return new Monomial<>(nonZeroDividend.getExponent()-nonZeroNonUnitDivisor.getExponent(),
+				baseDivide.apply(nonZeroDividend.getCoeficient(), nonZeroNonUnitDivisor.getCoeficient()));
 	}
 
 }

@@ -1,12 +1,12 @@
 package org.uulib.jam;
 
-import org.uulib.jam.algebra.ops.AdditionMonoid;
+import org.uulib.jam.algebra.AdditiveMonoid;
 
 public class Jam {
 	
 	private Jam() {}
 	
-	public static <E> E multiply(AdditionMonoid<E> monoid, E element, int times) {
+	public static <E> E multiply(AdditiveMonoid<E> monoid, E element, int times) {
 		if(times<0) {
 			throw new IllegalArgumentException("Integer multiple must be non-negative.");
 		} else if(times==0) {

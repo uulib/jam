@@ -1,10 +1,11 @@
-package org.uulib.jam.algebra.graded;
+package org.uulib.jam.algebra.graded.impl;
 
 import java.util.Optional;
 
 import org.uulib.jam.algebra.Field;
 import org.uulib.jam.algebra.NotAMemberException;
 import org.uulib.jam.algebra.VectorSpace;
+import org.uulib.jam.algebra.graded.GradedVectorSpace;
 
 public class DelegatingFactorSpace<V,S> implements VectorSpace<V,S> {
 	
@@ -31,6 +32,12 @@ public class DelegatingFactorSpace<V,S> implements VectorSpace<V,S> {
 	}
 
 	@Override
+	public boolean isZero(V element) {
+		return superSpace.isZero(checkGrade(element));
+	}
+
+
+	@Override
 	public V negate(V element) {
 		return superSpace.negate(checkGrade(element));
 	}
@@ -43,6 +50,11 @@ public class DelegatingFactorSpace<V,S> implements VectorSpace<V,S> {
 	@Override
 	public V subtract(V minuend, V subtrahend) {
 		return superSpace.subtract(checkGrade(minuend), checkGrade(subtrahend));
+	}
+	
+	@Override
+	public Optional<V> multiply(V element, int multiplier) {
+		return superSpace.multiply(checkGrade(element), multiplier);
 	}
 
 	@Override
@@ -68,6 +80,11 @@ public class DelegatingFactorSpace<V,S> implements VectorSpace<V,S> {
 	@Override
 	public Optional<S> divideToScalar(V dividend, V divisor) {
 		return superSpace.divideToScalar(checkGrade(dividend), checkGrade(divisor));
+	}
+
+	@Override
+	public Optional<V> scalarDivide(V dividend, S divisor) {
+		return superSpace.scalarDivide(dividend, divisor);
 	}
 
 }

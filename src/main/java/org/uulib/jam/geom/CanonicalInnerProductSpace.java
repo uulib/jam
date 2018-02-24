@@ -1,21 +1,21 @@
 package org.uulib.jam.geom;
 
 import org.uulib.jam.algebra.InnerProductSpace;
-import org.uulib.jam.algebra.graded.UnitalGradedAlgebra;
+import org.uulib.jam.algebra.graded.GradedUnitalAlgebra;
 
 public final class CanonicalInnerProductSpace<S,C> extends CanonicalVectorSpace<S,C> implements InnerProductSpace<Vector<C>,S,C> {
 	
-	private final UnitalGradedAlgebra<C,S> coefficientAlgebra;
+	private final GradedUnitalAlgebra<C,S> coefficientAlgebra;
 	private final int coefficientGrade;
 	
-	CanonicalInnerProductSpace(UnitalGradedAlgebra<C,S> coefficientAlgebra, int coefficientGrade, int dimension) {
+	CanonicalInnerProductSpace(GradedUnitalAlgebra<C,S> coefficientAlgebra, int coefficientGrade, int dimension) {
 		super(coefficientAlgebra.getFactorSpace(coefficientGrade), dimension);
 		this.coefficientAlgebra = coefficientAlgebra;
 		this.coefficientGrade = coefficientGrade;
 	}
 
 	@Override
-	public UnitalGradedAlgebra<C, S> getCoefficientAlgebra() {
+	public GradedUnitalAlgebra<C, S> getCoefficientAlgebra() {
 		return coefficientAlgebra;
 	}
 
