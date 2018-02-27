@@ -2,9 +2,9 @@ package org.uulib.jam.algebra.impl;
 
 import java.util.Optional;
 
-import org.uulib.jam.ObjIntFunction;
 import org.uulib.jam.algebra.WithIntMultiplication;
 import org.uulib.jam.algebra.WithZeroElement;
+import org.uulib.jam.util.ObjIntFunction;
 
 public interface DefaultIntDivision<E> extends WithIntMultiplication<E>, WithZeroElement<E> {
 	

@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.uulib.jam.ObjIntFunction;
 import org.uulib.jam.algebra.Field;
 import org.uulib.jam.algebra.graded.GradedDivisionAlgebra;
 import org.uulib.jam.algebra.graded.impl.AbstractUnitalGradedAlgebra;
@@ -14,6 +13,7 @@ import org.uulib.jam.algebra.impl.DefaultAddititionSubtraction;
 import org.uulib.jam.algebra.impl.DefaultIntDivision;
 import org.uulib.jam.algebra.impl.MultiplicativeGroupDefaults;
 import org.uulib.jam.algebra.impl.MultiplicativeMonoidDefaults;
+import org.uulib.jam.util.ObjIntFunction;
 
 public class MonomialAlgebra<E> extends AbstractUnitalGradedAlgebra<Monomial<E>,E>
 implements GradedDivisionAlgebra<Monomial<E>,E>, GradedVectorSpaceDefaults<Monomial<E>,E>, MultiplicativeGroupDefaults<Monomial<E>> {

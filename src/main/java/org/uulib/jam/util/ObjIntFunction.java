@@ -1,4 +1,4 @@
-package org.uulib.jam;
+package org.uulib.jam.util;
 
 @FunctionalInterface
 public interface ObjIntFunction<I,O> {

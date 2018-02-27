@@ -3,8 +3,8 @@ package org.uulib.jam.algebra.impl;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import org.uulib.jam.ObjIntFunction;
 import org.uulib.jam.algebra.MultiplicativeMonoid;
+import org.uulib.jam.util.ObjIntFunction;
 
 public interface MultiplicativeMonoidDefaults<E> extends MultiplicativeMonoid<E> {
 	
